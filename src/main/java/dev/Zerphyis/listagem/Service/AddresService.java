@@ -23,7 +23,6 @@ public class AddresService {
         Person person = personRepository.findById(personId)
                 .orElseThrow(() -> new PersonNotFoundExeception("Pessoa não encontrada com ID: " + personId));
 
-        // Desativa endereço principal anterior, se houver
         person.getEnderecos().forEach(Addres::desativeMain);
 
         Addres addres = new Addres(data, person);
@@ -40,7 +39,9 @@ public class AddresService {
     }
 
     public void delete(Long id) {
-        Addres address = getById(id);
+        Addres address = addresRepository.findById(id)
+                .orElseThrow(() -> new AddresNotFoundExeception("Endereço não encontrado com ID: " + id));
+
         addresRepository.delete(address);
     }
 }
