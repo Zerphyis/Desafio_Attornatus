@@ -29,14 +29,19 @@ public class PersonService {
     }
 
     public Person update(Long id, DataPerson data) {
-        Person person = getById(id);
+        Person person = repository.findById(id)
+                .orElseThrow(() -> new PersonNotFoundExeception("Pessoa não encontrada com ID: " + id));
+
         person.setName(data.name());
         person.setDateBirth(data.dateBirth());
+
         return repository.save(person);
     }
 
     public void delete(Long id) {
-        Person person = getById(id);
+        Person person = repository.findById(id)
+                .orElseThrow(() -> new PersonNotFoundExeception("Pessoa não encontrada com ID: " + id));
+
         repository.delete(person);
     }
 
