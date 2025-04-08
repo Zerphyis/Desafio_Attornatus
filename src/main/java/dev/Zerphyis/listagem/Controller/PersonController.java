@@ -52,8 +52,17 @@ public class PersonController {
     }
 
     @PutMapping("/{id}")
-    public Person update(@PathVariable("id") Long id, @RequestBody  DataPerson data) {
-        return service.update(id, data);
+    public DataPersonExit update(@PathVariable("id") Long id, @RequestBody DataPerson data) {
+        Person person = service.update(id, data);
+
+        List<DataAddresExit> addresses = person.getEnderecos().stream()
+                .map(addr -> new DataAddresExit(
+                        addr.getPublicPlace(),
+                        addr.getNumber(),
+                        addr.getCity()))
+                .toList();
+
+        return new DataPersonExit(person.getName(), person.getDateBirth(), addresses);
     }
 
     @DeleteMapping("/{id}")
